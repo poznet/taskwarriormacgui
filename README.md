@@ -61,6 +61,16 @@ Download the latest package from [Releases](../../releases):
 - **Fedora/RHEL**: `.rpm` — `sudo rpm -i TaskFloat_*.rpm`
 - **Any distro**: `.AppImage` — `chmod +x TaskFloat_*.AppImage && ./TaskFloat_*.AppImage`
 
+**Required system dependencies (Ubuntu/Debian):**
+```bash
+sudo apt install libwebkit2gtk-4.1-0
+```
+
+If you get dependency errors when installing the `.deb`, run:
+```bash
+sudo apt install -f
+```
+
 **Install Taskwarrior:**
 ```bash
 # Ubuntu/Debian
