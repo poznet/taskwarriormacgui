@@ -1,6 +1,6 @@
 # TaskFloat
 
-A floating task manager for macOS that sits on top of your windows. Powered by [Taskwarrior](https://taskwarrior.org/) as the backend engine.
+A floating task manager for macOS, Windows and Linux that sits on top of your windows. Powered by [Taskwarrior](https://taskwarrior.org/) as the backend engine.
 
 Built with **Tauri 2.0** + **SvelteKit** + **Svelte 5**.
 
@@ -28,47 +28,80 @@ Built with **Tauri 2.0** + **SvelteKit** + **Svelte 5**.
 
 ## Requirements
 
-- **macOS** 13.0+
 - **Taskwarrior 3.x** (tested with 3.4.1)
+- **macOS** 13.0+ / **Windows** 10+ / **Linux** (Ubuntu 22.04+, Fedora, Arch)
 
-### Instalacja Taskwarrior
+## Installation
 
+### macOS
+
+Download the latest `.dmg` from [Releases](../../releases), open it and drag **TaskFloat.app** to Applications.
+
+**Install Taskwarrior:**
 ```bash
 brew install task
 ```
 
-TaskFloat szuka binarki `task` w nastepujacych lokalizacjach (w tej kolejnosci):
+### Windows
 
-1. `/opt/homebrew/bin/task` — Homebrew na Apple Silicon (M1/M2/M3)
-2. `/usr/local/bin/task` — Homebrew na Intel Mac
-3. `/usr/bin/task` — systemowa instalacja
+Download the latest `.msi` or `_x64-setup.exe` from [Releases](../../releases) and run the installer.
 
-Jesli `task` jest zainstalowany w innej sciezce, upewnij sie ze jest dostepny w jednej z powyzszych lokalizacji (np. przez symlink).
+**Install Taskwarrior:**
 
-Dane Taskwarrior przechowywane sa w `~/.local/share/task/` (format TW3 — SQLite).
+Taskwarrior on Windows can be installed via:
+- [Scoop](https://scoop.sh/): `scoop install task`
+- [Chocolatey](https://chocolatey.org/): `choco install taskwarrior`
+- [MSYS2](https://www.msys2.org/): `pacman -S task`
+- Manual build from [source](https://github.com/GothenburgBitFactory/taskwarrior)
 
-## Installation
+### Linux
 
-### From DMG
+Download the latest package from [Releases](../../releases):
+- **Ubuntu/Debian**: `.deb` — `sudo dpkg -i TaskFloat_*.deb`
+- **Fedora/RHEL**: `.rpm` — `sudo rpm -i TaskFloat_*.rpm`
+- **Any distro**: `.AppImage` — `chmod +x TaskFloat_*.AppImage && ./TaskFloat_*.AppImage`
 
-Download the latest `.dmg` from [Releases](../../releases), open it and drag **TaskFloat.app** to Applications.
+**Install Taskwarrior:**
+```bash
+# Ubuntu/Debian
+sudo apt install taskwarrior
+
+# Fedora
+sudo dnf install task
+
+# Arch
+sudo pacman -S task
+```
+
+### Taskwarrior path detection
+
+TaskFloat automatically searches for the `task` binary in common locations:
+
+| Platform | Searched paths |
+|----------|---------------|
+| macOS | `/opt/homebrew/bin/task`, `/usr/local/bin/task`, `/usr/bin/task` |
+| Linux | `/usr/local/bin/task`, `/usr/bin/task` |
+| Windows | `C:\Program Files\Taskwarrior\bin\task.exe`, `C:\Program Files (x86)\Taskwarrior\bin\task.exe` |
+| All | Falls back to `task` in PATH |
+
+If `task` is installed in a non-standard location, you can set the path manually in **Settings > Sciezka do Taskwarrior**.
 
 ### Build from source
 
 ```bash
-# Prerequisites
-brew install task          # Taskwarrior 3.x
-rustup update stable       # Rust 1.88+
-npm install -g pnpm        # pnpm
+# Prerequisites: Taskwarrior 3.x, Rust 1.88+, pnpm
 
 # Clone and build
-git clone https://github.com/YOUR_USER/taskfloat.git
-cd taskfloat
+git clone https://github.com/poznet/taskwarriormacgui.git
+cd taskwarriormacgui
 pnpm install
 pnpm tauri build
 ```
 
-The built app will be at `src-tauri/target/release/bundle/macos/TaskFloat.app`.
+Build output locations:
+- **macOS**: `src-tauri/target/release/bundle/macos/TaskFloat.app`
+- **Windows**: `src-tauri/target/release/bundle/msi/TaskFloat_*.msi`
+- **Linux**: `src-tauri/target/release/bundle/deb/TaskFloat_*.deb`
 
 ## Development
 
@@ -116,6 +149,7 @@ Click the gear icon in the status bar to open settings (separate window):
 - **View mode** — list or kanban
 - **Pomodoro timer** — show/hide
 - **Due notifications** — enable/disable
+- **Taskwarrior path** — custom path to `task` binary (empty = auto-detect)
 
 ## Tech stack
 
