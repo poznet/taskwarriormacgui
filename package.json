@@ -21,6 +21,9 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.3.1"
 	},
+	"pnpm": {
+		"ignoredBuiltDependencies": ["esbuild"]
+	},
 	"dependencies": {
 		"@tauri-apps/api": "^2",
 		"@tauri-apps/plugin-autostart": "^2",
