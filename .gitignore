@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist/
+build/
+.svelte-kit/
+
+# Rust / Tauri
+src-tauri/target/
+
+# macOS binaries
+*.dmg
+*.app
+
+# Environment
+.env
+.env.*
+
+# Claude
+.claude
+claude.md
+
+# Project specific
+mac-desktop-taski-*
