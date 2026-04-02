@@ -45,6 +45,12 @@ pub struct TwInfo {
 fn find_task_binary() -> &'static str {
     static TASK_PATH: std::sync::OnceLock<String> = std::sync::OnceLock::new();
     TASK_PATH.get_or_init(|| {
+        #[cfg(target_os = "windows")]
+        let candidates = [
+            r"C:\Program Files\Taskwarrior\bin\task.exe",
+            r"C:\Program Files (x86)\Taskwarrior\bin\task.exe",
+        ];
+        #[cfg(not(target_os = "windows"))]
         let candidates = [
             "/opt/homebrew/bin/task",
             "/usr/local/bin/task",
@@ -55,7 +61,7 @@ fn find_task_binary() -> &'static str {
                 return path.to_string();
             }
         }
-        // Fallback — maybe it's in PATH (works in dev mode)
+        // Fallback — try PATH
         "task".to_string()
     })
 }
