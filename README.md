@@ -63,13 +63,19 @@ Download the latest package from [Releases](../../releases):
 
 **Required system dependencies (Ubuntu/Debian):**
 ```bash
+# Ubuntu 22.04+
 sudo apt install libwebkit2gtk-4.1-0
+
+# Ubuntu 20.04
+sudo apt install libwebkit2gtk-4.0-37
 ```
 
-If you get dependency errors when installing the `.deb`, run:
+Two `.deb` packages are provided in Releases — pick the one matching your Ubuntu version. If you get dependency errors, run:
 ```bash
 sudo apt install -f
 ```
+
+Alternatively, use the **AppImage** which works on any distro without extra dependencies.
 
 **Install Taskwarrior:**
 ```bash
