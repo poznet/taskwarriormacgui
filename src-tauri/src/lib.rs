@@ -35,6 +35,7 @@ pub fn run() {
             commands::get_projects,
             commands::get_tags,
             commands::check_taskwarrior,
+            commands::set_task_binary_path,
         ])
         .setup(|app| {
             let window = app

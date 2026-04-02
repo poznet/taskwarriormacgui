@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { LogicalSize } from '@tauri-apps/api/dpi';
+import { invoke } from '@tauri-apps/api/core';
 
 export interface Settings {
 	opacity: number;
@@ -14,6 +15,7 @@ export interface Settings {
 	notifyDue: boolean;
 	windowWidth: number;
 	windowHeight: number;
+	taskBinaryPath: string;
 }
 
 const STORAGE_KEY = 'taskfloat-settings';
@@ -30,6 +32,7 @@ const defaults: Settings = {
 	notifyDue: true,
 	windowWidth: 380,
 	windowHeight: 600,
+	taskBinaryPath: '',
 };
 
 function loadSettings(): Settings {
@@ -45,6 +48,7 @@ export const settings = writable<Settings>(loadSettings());
 settings.subscribe((s) => {
 	try {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+		invoke('set_task_binary_path', { path: s.taskBinaryPath || '' }).catch(() => {});
 	} catch {}
 });
 

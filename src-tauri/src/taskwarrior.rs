@@ -42,33 +42,50 @@ pub struct TwInfo {
     pub task_count: usize,
 }
 
-fn find_task_binary() -> &'static str {
-    static TASK_PATH: std::sync::OnceLock<String> = std::sync::OnceLock::new();
-    TASK_PATH.get_or_init(|| {
-        #[cfg(target_os = "windows")]
-        let candidates = [
-            r"C:\Program Files\Taskwarrior\bin\task.exe",
-            r"C:\Program Files (x86)\Taskwarrior\bin\task.exe",
-        ];
-        #[cfg(not(target_os = "windows"))]
-        let candidates = [
-            "/opt/homebrew/bin/task",
-            "/usr/local/bin/task",
-            "/usr/bin/task",
-        ];
-        for path in &candidates {
-            if std::path::Path::new(path).exists() {
-                return path.to_string();
-            }
+use std::sync::RwLock;
+
+static CUSTOM_TASK_PATH: RwLock<Option<String>> = RwLock::new(None);
+
+pub fn set_custom_binary_path(path: &str) {
+    let mut guard = CUSTOM_TASK_PATH.write().unwrap();
+    if path.is_empty() {
+        *guard = None;
+    } else {
+        *guard = Some(path.to_string());
+    }
+}
+
+fn find_task_binary() -> String {
+    // Check custom path first
+    if let Ok(guard) = CUSTOM_TASK_PATH.read() {
+        if let Some(ref custom) = *guard {
+            return custom.clone();
         }
-        // Fallback — try PATH
-        "task".to_string()
-    })
+    }
+
+    #[cfg(target_os = "windows")]
+    let candidates = [
+        r"C:\Program Files\Taskwarrior\bin\task.exe",
+        r"C:\Program Files (x86)\Taskwarrior\bin\task.exe",
+    ];
+    #[cfg(not(target_os = "windows"))]
+    let candidates = [
+        "/opt/homebrew/bin/task",
+        "/usr/local/bin/task",
+        "/usr/bin/task",
+    ];
+    for path in &candidates {
+        if std::path::Path::new(path).exists() {
+            return path.to_string();
+        }
+    }
+    // Fallback — try PATH
+    "task".to_string()
 }
 
 fn exec_task(args: &[&str]) -> Result<String, String> {
     let task_bin = find_task_binary();
-    let output = Command::new(task_bin)
+    let output = Command::new(&task_bin)
         .args(args)
         .output()
         .map_err(|e| format!("Failed to execute task ({}): {}. Is Taskwarrior installed?", task_bin, e))?;

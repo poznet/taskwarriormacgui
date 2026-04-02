@@ -211,6 +211,18 @@
 			</button>
 		</div>
 
+		<!-- Task binary path -->
+		<div class="setting-row">
+			<label>Sciezka do Taskwarrior</label>
+			<input
+				class="path-input"
+				type="text"
+				placeholder="auto (PATH)"
+				value={$settings.taskBinaryPath}
+				onchange={(e) => updateSetting('taskBinaryPath', e.currentTarget.value.trim())}
+			/>
+		</div>
+
 		<!-- Shortcut info -->
 		<div class="setting-row info">
 			<span class="shortcut-label">Skrot klawiszowy</span>
@@ -447,6 +459,27 @@
 	.shortcut-label {
 		font-size: 11px;
 		color: var(--text-muted);
+	}
+
+	.path-input {
+		width: 100%;
+		padding: 6px 10px;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		background: var(--bg-secondary);
+		color: var(--text-primary);
+		font-size: 12px;
+		font-family: 'SF Mono', 'Menlo', monospace;
+		outline: none;
+		box-sizing: border-box;
+	}
+
+	.path-input::placeholder {
+		color: var(--text-muted);
+	}
+
+	.path-input:focus {
+		border-color: var(--accent);
 	}
 
 	kbd {

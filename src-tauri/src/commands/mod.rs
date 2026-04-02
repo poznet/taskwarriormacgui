@@ -65,3 +65,9 @@ pub async fn get_tags() -> Result<Vec<String>, String> {
 pub async fn check_taskwarrior() -> Result<taskwarrior::TwInfo, String> {
     taskwarrior::check_taskwarrior()
 }
+
+#[tauri::command]
+pub async fn set_task_binary_path(path: String) -> Result<(), String> {
+    taskwarrior::set_custom_binary_path(&path);
+    Ok(())
+}
