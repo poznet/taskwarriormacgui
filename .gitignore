@@ -17,6 +17,9 @@ src-tauri/target/
 .env
 .env.*
 
+# macOS
+.DS_Store
+
 # Claude
 .claude
 claude.md
